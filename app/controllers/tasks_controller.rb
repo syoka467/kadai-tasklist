@@ -1,6 +1,15 @@
 class TasksController < ApplicationController
+    before_action :require_user_logged_in
+    before_action :set_task, only: [:show, :edit, :update, :destroy]
+    
     def index
+      
         @tasks = Task.all
+        
+      if logged_in?
+        @task = current_user.tasks.build  # form_with 用
+        #@tasks = current_user.tasks.order(id: :desc).page(params[:page])
+      end
     end
 
     def show
@@ -12,7 +21,7 @@ class TasksController < ApplicationController
     end
  
     def create
-        @task = Task.new(task_params)
+        @task = current_user.tasks.build(task_params)
 
         if @task.save
             
@@ -21,6 +30,7 @@ class TasksController < ApplicationController
         else
             flash.now[:danger] = 'task が投稿されませんでした'
             render :new
+            
         end
     end
 
@@ -44,11 +54,30 @@ class TasksController < ApplicationController
         @task = Task.find(params[:id])
         @task.destroy
 
-        flash[:success] = 'Message は正常に削除されました'
-        redirect_to messages_url
+        flash[:success] = 'Task は正常に削除されました'
+        redirect_to tasks_url
+    end
+    
+    private
+    
+    def set_task
+        
+        @task = Task.find(params[:id])
     end
     
     def task_params
-    params.require(:task).permit(:content)
-    end 
+        
+        params.require(:task).permit(:status,:content)
+    end  
+    
+    
+    
+    
+    #def ensure_correct_user
+    #@task = Task.find_by(id:params[:id])
+      #if @task.user_id != @current_user.id
+        #flash[:notice] = "権限がありません"
+        #redirect_to("/tasks/index")
+      #end
+    #end
 end
