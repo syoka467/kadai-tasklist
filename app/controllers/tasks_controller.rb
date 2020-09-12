@@ -1,16 +1,16 @@
 class TasksController < ApplicationController
 
     before_action :require_user_logged_in
-
     before_action :set_task, only: [:show, :edit, :update, :destroy]
+    
     
     def index
       
         @tasks = current_user.tasks
         
-      if logged_in?
-        @task = current_user.tasks.build  # form_with 用
-      end
+      #if logged_in?
+        #@task = current_user.tasks.build  # form_with 用
+      #end
     end
 
     def show
@@ -66,8 +66,12 @@ class TasksController < ApplicationController
     private
     
     def set_task
-        
         @task = Task.find(params[:id])
+        
+        @task = current_user.tasks.find_by(id: params[:id])
+        unless @task
+          redirect_to root_url
+        end
     end
 
     def task_params
@@ -76,12 +80,6 @@ class TasksController < ApplicationController
         params.require(:task).permit(:status,:content)
     end 
     
-    def correct_user
-      @micropost = current_user.tasks.find_by(id: params[:id])
-      unless @task
-        redirect_to root_url
-      end
-    end
     
     
     
