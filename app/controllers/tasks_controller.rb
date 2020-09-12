@@ -4,11 +4,10 @@ class TasksController < ApplicationController
     
     def index
       
-        @tasks = Task.all
+        @tasks = current_user.tasks
         
       if logged_in?
         @task = current_user.tasks.build  # form_with 用
-        #@tasks = current_user.tasks.order(id: :desc).page(params[:page])
       end
     end
 
@@ -39,7 +38,6 @@ class TasksController < ApplicationController
     end
 
     def update
-        @task = Task.find(params[:id])
 
         if @task.update(task_params)
             flash[:success] = 'Task は正常に更新されました'
@@ -51,7 +49,6 @@ class TasksController < ApplicationController
     end
 
     def destroy
-        @task = Task.find(params[:id])
         @task.destroy
 
         flash[:success] = 'Task は正常に削除されました'
@@ -64,20 +61,20 @@ class TasksController < ApplicationController
         
         @task = Task.find(params[:id])
     end
-    
+
     def task_params
-        
         params.require(:task).permit(:status,:content)
-    end  
+    end 
+    
+    def correct_user
+      @micropost = current_user.tasks.find_by(id: params[:id])
+      unless @task
+        redirect_to root_url
+      end
+    end
     
     
     
     
-    #def ensure_correct_user
-    #@task = Task.find_by(id:params[:id])
-      #if @task.user_id != @current_user.id
-        #flash[:notice] = "権限がありません"
-        #redirect_to("/tasks/index")
-      #end
-    #end
+
 end
