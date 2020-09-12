@@ -10,15 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2020_09_10_093705) do
+=======
+ActiveRecord::Schema.define(version: 2020_09_05_112032) do
+>>>>>>> b6ade44be4efc4ffff2e7fab8d03e6c84eb65388
 
   create_table "tasks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "status"
+<<<<<<< HEAD
     t.bigint "user_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
+=======
+>>>>>>> b6ade44be4efc4ffff2e7fab8d03e6c84eb65388
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
