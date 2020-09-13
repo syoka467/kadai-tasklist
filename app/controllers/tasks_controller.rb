@@ -55,19 +55,9 @@ class TasksController < ApplicationController
         redirect_to tasks_url
     end
     
-    
     private
     
     def set_task
-        
-        @task = Task.find(params[:id])
-    end
-    
-    private
-    
-    def set_task
-        @task = Task.find(params[:id])
-        
         @task = current_user.tasks.find_by(id: params[:id])
         unless @task
           redirect_to root_url
@@ -75,9 +65,7 @@ class TasksController < ApplicationController
     end
 
     def task_params
-
-        
-        params.require(:task).permit(:status,:content)
+      params.require(:task).permit(:status,:content)
     end 
     
     
